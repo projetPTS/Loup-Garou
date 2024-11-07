@@ -6,12 +6,6 @@ from pygame import *
 
 pygame.init()
 
-# couleur
-BLANC = (255, 255, 255)
-NOIR = (0, 0, 0)
-ROUGE = (255, 0, 0)
-BLEU = (0, 0, 255)
-
 # Config fenêtre
 LARGEUR, HAUTEUR = 800, 600
 fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR), pygame.RESIZABLE)
@@ -27,14 +21,14 @@ resolution = (800, 600)
 config_resolution(*resolution)
 
 # images
-fond = pygame.image.load('loup_garou_fond.jpeg')
-fond = pygame.transform.scale(fond, (LARGEUR, HAUTEUR))
+fond = pygame.image.load('assets/images/loup_garou_fond.jpeg')
+fond = pygame.transform.scale(fond, size)
 
 
 # images rôles
-roles_images = {"Ange de Noel": pygame.image.load("cupidon_carte.jpeg"),
-    "Hans": pygame.image.load("chasseur_carte.jpeg"),
-    "Harry & Marvin": pygame.image.load("voleur_carte.jpeg"),
+roles_images = {"Ange de Noel": pygame.image.load("assets/images/cupidon_carte.jpeg"),
+    "Hans": pygame.image.load("assets/images/chasseur_carte.jpeg"),
+    "Harry & Marvin": pygame.image.load("assets/images/voleur_carte.jpeg"),
 }
 """
     "Trolls": pygame.image.load("sorciere_carte.jpeg"),
@@ -44,8 +38,8 @@ roles_images = {"Ange de Noel": pygame.image.load("cupidon_carte.jpeg"),
     "Lutins": pygame.image.load("villageois_carte.jpeg")
 """
 
-carte_verso = pygame.image.load("verso_carte.jpeg")
-carte_verso = pygame.transform.scale(carte_verso, (int(LARGEUR * 0.5), int(LARGEUR * 0.5)))
+carte_verso = pygame.image.load("assets/images/verso_carte.jpeg")
+carte_verso = pygame.transform.scale(carte_verso, (int(size[0] * 0.5), int(size[1] * 0.5)))
 
 
 def redimensionner_images_roles():
@@ -140,53 +134,6 @@ def animation_carte(role):
         pygame.display.flip()
         pygame.time.delay(50)
 
-"""
-
-def zoom(role):
-    image = roles_images.get(role)
-    if not image:
-        return
-
-    taille_finale = (400, 400)
-    image_zoom = pygame.transform.scale(image, (50, 50))
-    image_rect = image_zoom.get_rect(center=(LARGEUR // 2, HAUTEUR // 2 - 100))
-    fenetre.blit(image_zoom, image_rect)
-    pygame.display.flip()
-    pygame.time.delay(200) 
-    image_zoom = pygame.transform.scale(image, taille_finale)
-    image_rect = image_zoom.get_rect(center=(LARGEUR // 2, HAUTEUR // 2 - 100))
-    fenetre.fill(BLANC) 
-    fenetre.blit(image_zoom, image_rect)
-
-
-def afficher_animation_carte(role):
-    image = roles_images.get(role)
-    if not image:
-        return
-    taille_finale = (300, 300)
-    taille_initiale = (10, 10)
-    steps = 4  # nb de frames animation
-    increment_x = (taille_finale[0] - taille_initiale[0]) // steps
-    increment_y = (taille_finale[1] - taille_initiale[1]) // steps
-
-    for i in range(steps):
-        taille_actuelle = (taille_initiale[0] + i * increment_x, taille_initiale[1] + i * increment_y)
-        image_zoom = pygame.transform.scale(image, taille_actuelle)
-        image_rect = image_zoom.get_rect(center=(LARGEUR // 2, HAUTEUR // 2 - 100))
-        fenetre.fill(BLANC)
-        fenetre.blit(image_zoom, image_rect)
-        pygame.display.flip()
-        pygame.time.delay(250)  # vitesse
-
-
-    image_zoom = pygame.transform.scale(image, taille_finale)
-    image_rect = image_zoom.get_rect(center=(LARGEUR // 2, HAUTEUR // 2 - 100))
-    fenetre.fill(BLANC)
-    fenetre.blit(image_zoom, image_rect)
-    pygame.display.flip()
-    pygame.time.delay(500)
-
-"""
 
 def clic():
     global index_joueur
