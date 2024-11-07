@@ -14,7 +14,6 @@ from characters import LoupGarou, Villageois
 fond = pygame.image.load('assets/images/loup_garou_fond.jpeg')
 fond = pygame.transform.scale(fond, size)
 
-
 # images rôles
 roles_images = {"Ange de Noel": pygame.image.load("assets/images/cupidon_carte.jpeg"),
     "Hans": pygame.image.load("assets/images/chasseur_carte.jpeg"),
@@ -136,7 +135,6 @@ def clic():
         if index_joueur >= len(joueurs):
             commencer_nuit()
 
-
 def commencer_nuit():
     fenetre.fill(BLEU)
     fenetre.blit(fond, (0, 0))
@@ -145,12 +143,7 @@ def commencer_nuit():
     pygame.display.flip()
     pygame.time.delay(3000)
     commencer_jour()
-"""
-
-"""
-
-
-
+    
 def commencer_jour():
     fenetre.fill(BLANC)
     afficher_texte("Le jour se lève. ", 36, NOIR, LARGEUR // 2,
@@ -178,6 +171,58 @@ def menu():
             pygame.quit()
             break
     return options
+    """
+def attribuer_roles(joueurs):
+    """
+    #Attribue aléatoirement des rôles de Loup-Garou et Villageois aux joueurs.
+    """
+    nb_loups = max(1, len(joueurs) // 4)  # 1 Loup-Garou pour 4 joueurs par exemple
+    roles_disponibles = [LoupGarou] * nb_loups + [Villageois] * (len(joueurs) - nb_loups)
+    random.shuffle(roles_disponibles)
+
+    for i in range(len(joueurs)):
+        role_classe = roles_disponibles[i]
+        joueurs[i] = role_classe(joueurs[i].name)  # Crée un nouvel objet avec le rôle attribué
+        print(f"{joueurs[i].name} est maintenant un {type(joueurs[i]).__name__}.")  # Pour vérifier l'attribution
+
+    return joueurs
+    """
+def demander_noms_joueurs(surface, nombre_joueurs):
+    pygame.font.init()
+    font = pygame.font.Font(None, 36)
+    player_name = []
+
+    for i in range(nombre_joueurs):
+        name = ""
+        saisie_active = True
+
+        while saisie_active:
+            surface.fill((30, 30, 30))
+            texte = font.render(f"Joueur {i + 1}, entrez votre nom :", True, (255, 255, 255))
+            surface.blit(texte, (surface.get_width() // 2 - texte.get_width() // 2, 200))
+
+            # Affiche le nom en cours de saisie
+            texte_name = font.render(name, True, (255, 255, 255))
+            surface.blit(texte_name, (surface.get_width() // 2 - texte_name.get_width() // 2, 300))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:  # Valider l'entrée avec "Enter"
+                        if name.strip():  # S'assurer que le nom n'est pas vide ou uniquement des espaces
+                            player_name.append(name)
+                            saisie_active = False  # Passe au joueur suivant
+                    elif event.key == pygame.K_BACKSPACE:  # Supprimer le dernier caractère
+                        name = name[:-1]
+                    else:
+                        name += event.unicode  # Ajouter le caractère saisi
+
+    return player_name
+
 
 
 def main():
@@ -190,12 +235,22 @@ def main():
     pygame.display.set_caption("Jeu Loups-Garous")
 
     options = menu()
-
+    """
     joueurs = [
         LoupGarou("Alice"),
         Villageois("Charlie"),  # Villageois par défaut
         Villageois("Diana"),  # Villageois par défaut
     ]
+    """
+    # Définissez le nombre de joueurs (vous pouvez aussi le rendre dynamique)
+    nombre_joueurs = 3  # Exemple : 3 joueurs
+    player_name = demander_noms_joueurs(surface, nombre_joueurs)
+
+    # Création initiale des joueurs avec les noms fournis
+    joueurs = [Villageois(name) for name in player_name]  # Les joueurs commencent comme villageois par défaut
+
+    # Attribution des rôles aléatoires
+    #joueurs = attribuer_roles(joueurs)
 
     game = Game(surface, joueurs)
     game.boucle_principale()
