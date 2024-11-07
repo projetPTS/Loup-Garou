@@ -180,7 +180,6 @@ def menu():
     return options
 
 
-
 def main():
     global surface, size
     pygame.init()

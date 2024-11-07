@@ -1,4 +1,4 @@
-class chasseur:
+class Chasseur:
     def __init__(self, villageois):
         self.parent = villageois
         self.parent.name = "Chasseur"
