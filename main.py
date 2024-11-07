@@ -4,22 +4,12 @@ import time
 import sys
 from pygame import *
 
-pygame.init()
+from game import Game
+from menu import afficher_menu, afficher_options
+from characters import LoupGarou, Villageois
 
-# Config fenêtre
-LARGEUR, HAUTEUR = 800, 600
-fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR), pygame.RESIZABLE)
-pygame.display.set_caption("Jeu Loups-Garous")
 
-def config_resolution(largeur, hauteur):
-    global LARGEUR, HAUTEUR, fenetre
-    LARGEUR, HAUTEUR = largeur, hauteur
-    fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
-    pygame.display.set_caption("Jeu Loups-Garous")
-
-resolution = (800, 600)
-config_resolution(*resolution)
-
+"""
 # images
 fond = pygame.image.load('assets/images/loup_garou_fond.jpeg')
 fond = pygame.transform.scale(fond, size)
@@ -30,13 +20,12 @@ roles_images = {"Ange de Noel": pygame.image.load("assets/images/cupidon_carte.j
     "Hans": pygame.image.load("assets/images/chasseur_carte.jpeg"),
     "Harry & Marvin": pygame.image.load("assets/images/voleur_carte.jpeg"),
 }
-"""
+
     "Trolls": pygame.image.load("sorciere_carte.jpeg"),
     "Luna Lovegood": pygame.image.load("voyante_carte.jpeg"),
     "Olaf": pygame.image.load("petite_fille_carte.jpeg"),
     "Grinch-Garou": pygame.image.load("grinch_garou_carte.jpeg"),
     "Lutins": pygame.image.load("villageois_carte.jpeg")
-"""
 
 carte_verso = pygame.image.load("assets/images/verso_carte.jpeg")
 carte_verso = pygame.transform.scale(carte_verso, (int(size[0] * 0.5), int(size[1] * 0.5)))
@@ -44,7 +33,7 @@ carte_verso = pygame.transform.scale(carte_verso, (int(size[0] * 0.5), int(size[
 
 def redimensionner_images_roles():
     for role, image in roles_images.items():
-        roles_images[role] = pygame.transform.scale(image, (int(LARGEUR * 0.25), int(LARGEUR * 0.25)))
+        roles_images[role] = pygame.transform.scale(image, (int(size[0] * 0.25), int(size[1] * 0.25)))
 
 redimensionner_images_roles()
 
@@ -157,7 +146,7 @@ def commencer_nuit():
     pygame.time.delay(3000)
     commencer_jour()
 """
-    
+
 """
 
 
@@ -168,10 +157,60 @@ def commencer_jour():
                    HAUTEUR // 2)
     pygame.display.flip()
     pygame.time.delay(3000)
+"""
+
+
+def menu():
+    options = {
+        'usealt_name': True
+    }
+    while True:
+        choix = afficher_menu(surface)
+        if choix == "Jouer":
+            print("Lancement du jeu...")
+            break
+        elif choix == "Options":
+            print("Options sélectionnée")
+            options = afficher_options(surface, options)
+
+        elif choix == "Quitter":
+            print("Jeu quitté.")
+            pygame.quit()
+            break
+    return options
+
 
 
 def main():
-    creation_joueurs()
+    global surface, size
+    pygame.init()
+
+    # Config fenêtre
+    size = (800, 600)
+    surface = pygame.display.set_mode(size, pygame.RESIZABLE)
+    pygame.display.set_caption("Jeu Loups-Garous")
+
+    options = menu()
+
+    joueurs = [
+        LoupGarou("Alice"),
+        Villageois("Charlie"),  # Villageois par défaut
+        Villageois("Diana"),  # Villageois par défaut
+    ]
+
+    game = Game(surface, joueurs)
+    game.boucle_principale()
+
+    # Appeler le MENU
+
+    # Recensement des joueurs
+
+    # Attribution des rôles
+
+    # Demarrer le jeu ? Bouton
+
+    """
+
     en_jeu = True
 
     while en_jeu:
@@ -188,6 +227,7 @@ def main():
             en_jeu = False
 
         pygame.display.flip()
+    """
 
     pygame.quit()
     sys.exit()

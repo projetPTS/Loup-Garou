@@ -103,4 +103,4 @@ def afficher_options(surface, options):
 
         pygame.display.flip()
 
-    return options  # Retourne les options mises à jour pour les utiliser ailleurs
+    return options

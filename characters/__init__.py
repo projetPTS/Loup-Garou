@@ -1,4 +1,6 @@
-from .villageois import Villageois
-from .loup_garou import Loup_Garou
-
-__all__ = ["Villageois", "Loup_Garou", "AnotherClass"]
+from .Villageois import Villageois
+from .LoupGarou import LoupGarou
+from .Sorciere import Sorciere
+from .Voleur import Voleur
+from .Cupidon import Cupidon
+from .Chasseur import Chasseur
