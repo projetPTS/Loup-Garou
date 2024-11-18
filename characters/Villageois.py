@@ -9,8 +9,8 @@ class Villageois:
         self.isMayor = False
 
         self.card = "./assets/images/cards/villageois_carte.jpeg"
-        self.texte_role = ""
-        self.texte_info = ""
+        self.text_role = "Ils n’ont pas de pouvoir, leur objectif est d’éliminer les loups-garous."
+        self.text_info = "« Les lutins de Noël sont des petites créatures qui aident le Père Noël à préparer les cadeaux dans l'atelier du pôle Nord. »"
 
     def night_action(self):
         return

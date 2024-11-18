@@ -6,6 +6,8 @@ class LoupGarou(Villageois):
         self.player_name = player_name
         self.name = "Loup-Garou"
         self.alt_name = "Grinch-Garou"
+        self.text_role = "Ils se réveillent chaque nuit, leur objectif est d’éliminer les villageois en toute discrétion."
+        self.text_info = "Tiré du film Le Grinch sorti dans les années 2000. Il déteste Noël."
 
         self.card = "./assets/images/cards/loup_garou_carte.jpeg"
 
