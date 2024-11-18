@@ -270,7 +270,7 @@ def attribuer_roles(joueurs):
     for i in range(len(joueurs)):
         role_classe = roles_disponibles[i]
         joueurs[i] = role_classe(joueurs[i].player_name)  # Envoi du nom comme argument
-        print(f"Nom du joueur : {joueurs[i].player_name}, Rôle : {joueurs[i].name}")
+        print(f"Nom du joueur : {joueurs[i].player_name}, Rôle : {joueurs[i].alt_name}")
 
     return joueurs
 
@@ -293,11 +293,11 @@ def revele_role(joueur, surface):
         surface.blit(carte_image, (carte_x, carte_y))
     except FileNotFoundError:
         surface.fill((255, 255, 255))
-        texte_role = font.render(f"Image introuvable pour : {joueur.name}", True, (255, 0, 0))
+        texte_role = font.render(f"Image introuvable pour : {joueur.alt_name}", True, (255, 0, 0))
         surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, surface.get_height() // 2))
 
 
-    texte_role = font.render(f"Ton rôle est : {joueur.name}", True, (255, 0, 0))
+    texte_role = font.render(f"Ton rôle est : {joueur.alt_name}", True, (255, 0, 0))
     texte_role_y = 10
     surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, texte_role_y))
     pygame.display.flip()

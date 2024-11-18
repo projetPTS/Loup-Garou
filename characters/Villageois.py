@@ -9,6 +9,8 @@ class Villageois:
         self.isMayor = False
 
         self.card = "./assets/images/cards/villageois_carte.jpeg"
+        self.texte_role = ""
+        self.texte_info = ""
 
     def night_action(self):
         return
