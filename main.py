@@ -278,7 +278,14 @@ def afficher_role_joueur(joueur, surface):
     surface.fill((255, 255, 255))
     font = pygame.font.Font(None, 48)
     texte_nom = font.render(f"{joueur.player_name}, clique pour découvrir ton rôle :", True, (0, 0, 0))
-    surface.blit(texte_nom, (surface.get_width() // 2 - texte_nom.get_width() // 2, 100))
+    texte_nom_y = 10
+    surface.blit(texte_nom, (surface.get_width() // 2 - texte_nom.get_width() // 2, texte_nom_y))
+    verso_carte = "./assets/images/cards/verso_carte.jpeg"
+    carte_image = pygame.image.load(verso_carte)
+    carte_image = pygame.transform.scale(carte_image, (500, 500))
+    carte_x = surface.get_width() // 2 - carte_image.get_width() // 2
+    carte_y = surface.get_height() // 2 - carte_image.get_height() // 2
+    surface.blit(carte_image, (carte_x, carte_y))
     pygame.display.flip()
 
 def revele_role(joueur, surface):
@@ -293,7 +300,7 @@ def revele_role(joueur, surface):
         surface.blit(carte_image, (carte_x, carte_y))
     except FileNotFoundError:
         surface.fill((255, 255, 255))
-        texte_role = font.render(f"Image introuvable pour : {joueur.alt_name}", True, (255, 0, 0))
+        texte_role = font.render(f"Image en cours de réalisation pour : {joueur.alt_name}", True, (255, 0, 0))
         surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, surface.get_height() // 2))
 
 
