@@ -1,10 +1,12 @@
-class voyante:
-    def __init__(self, villageois):
-        self.parent = villageois
-        self.parent.name = "Voyante"
-        self.parent.alt_name = "Luna Lovegood"
+from characters.Villageois import Villageois
+class Voyante(Villageois):
+    def __init__(self,player_name):
+        super().__init__(player_name)
+        self.player_name = player_name
+        self.name = "Voyante"
+        self.alt_name = "Luna Lovegood"
 
-        self.parent.card = "./assets/images/cards/voyante_carte.jpeg"
+        self.card = "./assets/images/cards/voyante_carte.jpeg"
 
     def night_action(self):
         return

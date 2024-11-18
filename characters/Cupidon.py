@@ -1,10 +1,13 @@
-class Cupidon :
-    def __init__(self, villageois):
-        self.parent = villageois
-        self.parent.name = "Cupidon"
-        self.parent.alt_name = "Ange de Noel"
+from characters.Villageois import Villageois
 
-        self.parent.card = "./assets/images/cards/cupidon_carte.jpeg"
+class Cupidon(Villageois):
+    def __init__(self, player_name):
+        super().__init__(player_name)
+        self.player_name = player_name
+        self.name = "Cupidon"
+        self.alt_name = "Ange de Noel"
+
+        self.card = "./assets/images/cards/cupidon_carte.jpeg"
 
     def night_action(self):
         return

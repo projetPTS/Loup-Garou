@@ -1,10 +1,11 @@
-class Chasseur:
-    def __init__(self, villageois):
-        self.parent = villageois
-        self.parent.name = "Chasseur"
-        self.parent.alt_name = "Hans"
+from characters.Villageois import Villageois
+class Chasseur(Villageois):
+    def __init__(self, player_name):
+        super().__init__(player_name)
+        self.name = "Chasseur"
+        self.alt_name = "Hans"
 
-        self.parent.card = "./assets/images/cards/chasseur_carte.jpeg"
+        self.card = "./assets/images/cards/chasseur_carte.jpeg"
 
     def night_action(self):
         return

@@ -1,10 +1,11 @@
-class Voleur:
-    def __init__(self, villageois):
-        self.parent = villageois
-        self.parent.name = "Voleur"
-        self.parent.alt_name = "Harry & Marvin"
+from characters.Villageois import Villageois
+class Voleur(Villageois):
+    def __init__(self,player_name):
+        super().__init__(player_name)
+        self.player_name = player_name
+        self.name = "Voleur"
+        self.alt_name = "Harry & Marvin"
 
-        self.parent.card = "./assets/images/cards/voleur_carte.jpeg"
 
     def night_action(self):
         return

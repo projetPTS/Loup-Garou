@@ -6,7 +6,14 @@ from pygame import *
 
 from game import Game
 from menu import afficher_menu, afficher_options
-from characters import LoupGarou, Villageois
+from characters.LoupGarou import LoupGarou
+from characters.Villageois import Villageois
+from characters.Voyante import Voyante
+from characters.Sorciere import Sorciere
+from characters.Cupidon import Cupidon
+from characters.Voleur import Voleur
+from characters.Chasseur import Chasseur
+from characters.Petite_fille import Petite_fille
 
 
 """
@@ -171,22 +178,7 @@ def menu():
             pygame.quit()
             break
     return options
-    """
-def attribuer_roles(joueurs):
-    """
-    #Attribue aléatoirement des rôles de Loup-Garou et Villageois aux joueurs.
-    """
-    nb_loups = max(1, len(joueurs) // 4)  # 1 Loup-Garou pour 4 joueurs par exemple
-    roles_disponibles = [LoupGarou] * nb_loups + [Villageois] * (len(joueurs) - nb_loups)
-    random.shuffle(roles_disponibles)
 
-    for i in range(len(joueurs)):
-        role_classe = roles_disponibles[i]
-        joueurs[i] = role_classe(joueurs[i].name)  # Crée un nouvel objet avec le rôle attribué
-        print(f"{joueurs[i].name} est maintenant un {type(joueurs[i]).__name__}.")  # Pour vérifier l'attribution
-
-    return joueurs
-    """
 def demander_noms_joueurs(surface, nombre_joueurs):
     pygame.font.init()
     font = pygame.font.Font(None, 36)
@@ -224,6 +216,33 @@ def demander_noms_joueurs(surface, nombre_joueurs):
     return player_name
 
 
+def attribuer_roles(joueurs):
+    # Rôles uniques, qui doivent apparaître au maximum une seule fois
+    roles_uniques = [Voyante, Sorciere, Cupidon, Voleur, Chasseur, Petite_fille]
+    roles_disponibles = []
+
+    # Ajout de chaque rôle unique une fois dans la liste des rôles disponibles
+    roles_disponibles.extend(roles_uniques)
+
+    # Calcul du nombre de Loups-Garous nécessaires
+    nb_loups = max(1, len(joueurs) // 4)
+    roles_disponibles.extend([LoupGarou] * nb_loups)
+
+    # Compléter le reste des joueurs avec des Villageois
+    nombre_joueurs_restants = len(joueurs) - len(roles_disponibles)
+    roles_disponibles.extend([Villageois] * nombre_joueurs_restants)
+
+    # Mélange des rôles pour une attribution aléatoire
+    random.shuffle(roles_disponibles)
+
+    # Attribution des rôles aux joueurs
+    for i in range(len(joueurs)):
+        role_classe = roles_disponibles[i]
+        joueurs[i] = role_classe(joueurs[i].player_name)  # Envoi du nom comme argument
+        print(f"Nom du joueur : {joueurs[i].player_name}, Rôle : {joueurs[i].name}")
+
+    return joueurs
+
 
 def main():
     global surface, size
@@ -239,7 +258,7 @@ def main():
     joueurs = [
         LoupGarou("Alice"),
         Villageois("Charlie"),  # Villageois par défaut
-        Villageois("Diana"),  # Villageois par défaut
+        Villageois("Diana"),  # Villageois par défaut 
     ]
     """
     # Définissez le nombre de joueurs (vous pouvez aussi le rendre dynamique)
@@ -250,7 +269,7 @@ def main():
     joueurs = [Villageois(name) for name in player_name]  # Les joueurs commencent comme villageois par défaut
 
     # Attribution des rôles aléatoires
-    #joueurs = attribuer_roles(joueurs)
+    joueurs = attribuer_roles(joueurs)
 
     game = Game(surface, joueurs)
     game.boucle_principale()
