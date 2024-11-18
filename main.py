@@ -179,6 +179,40 @@ def menu():
             break
     return options
 
+def demander_nombre_joueurs(surface):
+    pygame.font.init()
+    font = pygame.font.Font(None, 36)
+    nombre_joueurs = ""
+    saisie_active = True
+
+    while saisie_active:
+        surface.fill((30, 30, 30))
+        texte = font.render("Entrez le nombre de joueurs (6 à 12) :", True, (255, 255, 255))
+        surface.blit(texte, (surface.get_width() // 2 - texte.get_width() // 2, 200))
+
+        texte_nombre = font.render(nombre_joueurs, True, (255, 255, 255))
+        surface.blit(texte_nombre, (surface.get_width() // 2 - texte_nombre.get_width() // 2, 300))
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if nombre_joueurs.isdigit() and 6 <= int(nombre_joueurs) <= 12:
+                        saisie_active = False
+                    else:
+                        nombre_joueurs = ""  # Réinitialiser la saisie en cas de valeur invalide
+                elif event.key == pygame.K_BACKSPACE:
+                    nombre_joueurs = nombre_joueurs[:-1]
+                else:
+                    if event.unicode.isdigit():
+                        nombre_joueurs += event.unicode
+
+    return int(nombre_joueurs)
+
 def demander_noms_joueurs(surface, nombre_joueurs):
     pygame.font.init()
     font = pygame.font.Font(None, 36)
@@ -204,38 +238,35 @@ def demander_noms_joueurs(surface, nombre_joueurs):
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:  # Valider l'entrée avec "Enter"
-                        if name.strip():  # S'assurer que le nom n'est pas vide ou uniquement des espaces
+                    if event.key == pygame.K_RETURN:
+                        if name.strip():
                             player_name.append(name)
-                            saisie_active = False  # Passe au joueur suivant
-                    elif event.key == pygame.K_BACKSPACE:  # Supprimer le dernier caractère
+                            saisie_active = False
+                    elif event.key == pygame.K_BACKSPACE:
                         name = name[:-1]
                     else:
-                        name += event.unicode  # Ajouter le caractère saisi
+                        name += event.unicode
 
     return player_name
 
 
 def attribuer_roles(joueurs):
-    # Rôles uniques, qui doivent apparaître au maximum une seule fois
+    # roles max une seule fois
     roles_uniques = [Voyante, Sorciere, Cupidon, Voleur, Chasseur, Petite_fille]
     roles_disponibles = []
-
-    # Ajout de chaque rôle unique une fois dans la liste des rôles disponibles
     roles_disponibles.extend(roles_uniques)
 
-    # Calcul du nombre de Loups-Garous nécessaires
+    #nb Loups-Garous
     nb_loups = max(1, len(joueurs) // 4)
     roles_disponibles.extend([LoupGarou] * nb_loups)
 
-    # Compléter le reste des joueurs avec des Villageois
+    #reste Villageois
     nombre_joueurs_restants = len(joueurs) - len(roles_disponibles)
     roles_disponibles.extend([Villageois] * nombre_joueurs_restants)
 
-    # Mélange des rôles pour une attribution aléatoire
     random.shuffle(roles_disponibles)
 
-    # Attribution des rôles aux joueurs
+    #attribution rôles
     for i in range(len(joueurs)):
         role_classe = roles_disponibles[i]
         joueurs[i] = role_classe(joueurs[i].player_name)  # Envoi du nom comme argument
@@ -243,33 +274,79 @@ def attribuer_roles(joueurs):
 
     return joueurs
 
+def afficher_role_joueur(joueur, surface):
+    surface.fill((255, 255, 255))
+    font = pygame.font.Font(None, 48)
+    texte_nom = font.render(f"{joueur.player_name}, clique pour découvrir ton rôle :", True, (0, 0, 0))
+    surface.blit(texte_nom, (surface.get_width() // 2 - texte_nom.get_width() // 2, 100))
+    pygame.display.flip()
+
+def revele_role(joueur, surface):
+    surface.fill((255, 255, 255))
+    font = pygame.font.Font(None, 48)
+
+    try:
+        carte_image = pygame.image.load(joueur.card)
+        carte_image = pygame.transform.scale(carte_image, (600, 600))
+        carte_x = surface.get_width() // 2 - carte_image.get_width() // 2
+        carte_y = surface.get_height() // 2 - carte_image.get_height() // 2
+        surface.blit(carte_image, (carte_x, carte_y))
+    except FileNotFoundError:
+        surface.fill((255, 255, 255))
+        texte_role = font.render(f"Image introuvable pour : {joueur.name}", True, (255, 0, 0))
+        surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, surface.get_height() // 2))
+
+
+    texte_role = font.render(f"Ton rôle est : {joueur.name}", True, (255, 0, 0))
+    texte_role_y = 10
+    surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, texte_role_y))
+    pygame.display.flip()
+
+
 
 def main():
     global surface, size
     pygame.init()
 
-    # Config fenêtre
+    # config fenêtre
     size = (800, 600)
     surface = pygame.display.set_mode(size, pygame.RESIZABLE)
     pygame.display.set_caption("Jeu Loups-Garous")
 
     options = menu()
-    """
-    joueurs = [
-        LoupGarou("Alice"),
-        Villageois("Charlie"),  # Villageois par défaut
-        Villageois("Diana"),  # Villageois par défaut 
-    ]
-    """
-    # Définissez le nombre de joueurs (vous pouvez aussi le rendre dynamique)
-    nombre_joueurs = 3  # Exemple : 3 joueurs
+
+    # DEFINIR nombre joueurs
+    nombre_joueurs = demander_nombre_joueurs(surface)
+    """nombre_joueurs = 10 """
     player_name = demander_noms_joueurs(surface, nombre_joueurs)
 
-    # Création initiale des joueurs avec les noms fournis
     joueurs = [Villageois(name) for name in player_name]  # Les joueurs commencent comme villageois par défaut
-
-    # Attribution des rôles aléatoires
     joueurs = attribuer_roles(joueurs)
+
+    index_joueur = 0
+    role_revele = False
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN and not role_revele:
+                revele_role(joueurs[index_joueur], surface)
+                role_revele = True
+            elif event.type == pygame.MOUSEBUTTONDOWN and role_revele:
+                index_joueur += 1
+                role_revele = False
+                if index_joueur >= len(joueurs):
+                    running = False
+                else:
+                    afficher_role_joueur(joueurs[index_joueur], surface)
+
+        if not role_revele and index_joueur < len(joueurs):
+            afficher_role_joueur(joueurs[index_joueur], surface)
+
+        pygame.display.flip()
+
 
     game = Game(surface, joueurs)
     game.boucle_principale()
@@ -282,25 +359,6 @@ def main():
 
     # Demarrer le jeu ? Bouton
 
-    """
-
-    en_jeu = True
-
-    while en_jeu:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                en_jeu = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                clic()
-
-        if index_joueur < nombre_joueurs:
-            afficher_rolejoueur()
-        else:
-            commencer_nuit()
-            en_jeu = False
-
-        pygame.display.flip()
-    """
 
     pygame.quit()
     sys.exit()
@@ -308,9 +366,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
-    # joueur rôle un par un
-    for joueur in joueurs:
-        input(f"{joueur['nom']}, appuyez sur Entrée pour découvrir votre rôle.")
-creation_joueurs(5)  # Exemple avec 5 joueurs
-"""
