@@ -6,8 +6,8 @@ class Sorciere(Villageois):
         self.name = "Sorcière"
         self.alt_name = "Troll"
         self.card = "./assets/images/cards/sorciere_carte.jpeg"
-        self.texte_role = "Elle a 2 potions lui permettant de sauver un joueur attaqué par les loups-garous ou d’en éliminer un."
-        self.texte_info = "Tiré du film La Reine des Neiges"
+        self.text_role = "Elle a 2 potions lui permettant de sauver un joueur attaqué par les loups-garous ou d’en éliminer un."
+        self.text_info = "Tiré du film La Reine des Neiges"
 
     def night_action(self):
         return
