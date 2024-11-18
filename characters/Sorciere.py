@@ -6,6 +6,8 @@ class Sorciere(Villageois):
         self.name = "Sorcière"
         self.alt_name = "Troll"
         self.card = "./assets/images/cards/sorciere_carte.jpeg"
+        self.texte_role = ""
+        self.texte_info = ""
 
     def night_action(self):
         return

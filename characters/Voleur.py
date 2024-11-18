@@ -5,6 +5,7 @@ class Voleur(Villageois):
         self.player_name = player_name
         self.name = "Voleur"
         self.alt_name = "Harry & Marvin"
+        self.card = "./assets/images/cards/voleur_carte.jpeg"
 
 
     def night_action(self):
