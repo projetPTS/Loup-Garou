@@ -269,7 +269,7 @@ def attribuer_roles(joueurs):
     #attribution rôles
     for i in range(len(joueurs)):
         role_classe = roles_disponibles[i]
-        joueurs[i] = role_classe(joueurs[i].player_name)  # Envoi du nom comme argument
+        joueurs[i] = role_classe(joueurs[i].player_name)
         print(f"Nom du joueur : {joueurs[i].player_name}, Rôle : {joueurs[i].alt_name}")
 
     return joueurs
@@ -292,12 +292,14 @@ def revele_role(joueur, surface):
     surface.fill((255, 255, 255))
     font = pygame.font.Font(None, 48)
 
+
     try:
         carte_image = pygame.image.load(joueur.card)
         carte_image = pygame.transform.scale(carte_image, (600, 600))
         carte_x = surface.get_width() // 2 - carte_image.get_width() // 2
         carte_y = surface.get_height() // 2 - carte_image.get_height() // 2
         surface.blit(carte_image, (carte_x, carte_y))
+
     except FileNotFoundError:
         surface.fill((255, 255, 255))
         texte_role = font.render(f"Image en cours de réalisation pour : {joueur.alt_name}", True, (255, 0, 0))
@@ -307,7 +309,46 @@ def revele_role(joueur, surface):
     texte_role = font.render(f"Ton rôle est : {joueur.alt_name}", True, (255, 0, 0))
     texte_role_y = 10
     surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, texte_role_y))
+
+
+    font_text= pygame.font.Font(None, 26)
+
+    # droite
+    texte_infocarte_y = 300
+    texte_infocarte_x = surface.get_width() // 2 + 200
+    texte_infocarte_width = surface.get_width() // 2.5 - 100  # largeur txt
+    render_multiline_text(surface, joueur.text_info, font_text, (0, 0, 0), texte_infocarte_x, texte_infocarte_y, texte_infocarte_width)
+
+    # gauche
+    texte_rolecarte_y = 300
+    texte_rolecarte_x = 20
+    texte_rolecarte_width = surface.get_width() // 2.5 - 100
+    render_multiline_text(surface, f"Explication :{joueur.text_role}", font_text, (0, 0, 0), texte_rolecarte_x, texte_rolecarte_y, texte_rolecarte_width)
+
+
     pygame.display.flip()
+
+
+def render_multiline_text(surface, text, font, color, x, y, max_width):
+    """Découpe et rend un texte multi-lignes dans une zone définie."""
+    words = text.split(" ")
+    lines = []
+    current_line = ""
+
+    for word in words:
+        test_line = current_line + word + " "
+        if font.size(test_line)[0] <= max_width:
+            current_line = test_line
+        else:
+            lines.append(current_line.strip())
+            current_line = word + " "
+    if current_line:
+        lines.append(current_line.strip())
+
+    for line in lines:
+        rendered_line = font.render(line, True, color)
+        surface.blit(rendered_line, (x, y))
+        y += font.get_linesize()
 
 
 
@@ -327,7 +368,7 @@ def main():
     """nombre_joueurs = 10 """
     player_name = demander_noms_joueurs(surface, nombre_joueurs)
 
-    joueurs = [Villageois(name) for name in player_name]  # Les joueurs commencent comme villageois par défaut
+    joueurs = [Villageois(name) for name in player_name]  # joueurs = villageois
     joueurs = attribuer_roles(joueurs)
 
     index_joueur = 0
