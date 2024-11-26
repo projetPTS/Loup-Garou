@@ -103,6 +103,21 @@ class Game:
                 print(f"{joueur1.player_name} meurt par amour pour {joueur2.player_name}.")
                 joueur1.isAlive = False
 
+    def afficher_transition(self, texte):
+        """
+        Affiche une transition avec un message temporaire entre deux phases du jeu.
+        :param texte: Le message à afficher pendant la transition.
+        """
+        self.surface.fill((0, 0, 0))  # Écran noir
+
+        font = pygame.font.Font(None, 50)  # Police plus grande pour le titre
+        texte_surface = font.render(texte, True, (255, 255, 255))  # Texte en blanc
+        texte_rect = texte_surface.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() // 2))
+        self.surface.blit(texte_surface, texte_rect)
+
+        pygame.display.flip()  # Met à jour l'affichage
+        pygame.time.delay(3000)  # Pause de 3 secondes
+
     def phase_cupidon(self):
         """
         Cupidon choisit deux amoureux au début de la nuit.
@@ -125,68 +140,77 @@ class Game:
     def afficher_statut_amoureux(self):
         """
         Permet à chaque joueur vivant de découvrir son statut amoureux.
+        Les prénoms cliqués sont retirés de la liste pour éviter la confusion.
         """
         joueurs_vivants = [joueur for joueur in self.joueurs if joueur.isAlive]
+        joueurs_restants = joueurs_vivants.copy()  # Copie des joueurs à traiter
 
-        for joueur_actuel in joueurs_vivants:
-            statut_affiche = False
+        while joueurs_restants:
+            self.surface.fill((0, 0, 0))  # Efface l'écran
 
-            while not statut_affiche:
-                self.surface.fill((0, 0, 0))  # Efface l'écran
+            # Titre
+            font = pygame.font.Font(None, 36)
+            titre = font.render(
+                "Cliquez sur votre prénom pour découvrir votre statut amoureux.",
+                True, (255, 255, 255)
+            )
+            titre_rect = titre.get_rect(center=(self.surface.get_width() // 2, 50))
+            self.surface.blit(titre, titre_rect)
 
-                # Affiche un message pour demander de cliquer sur son prénom
-                font = pygame.font.Font(None, 36)
-                titre = font.render(
-                    "Cliquez sur votre prénom pour découvrir votre statut amoureux.",
-                    True, (255, 255, 255)
+            # Affichage des boutons pour les prénoms restants
+            positions = []
+            for idx, joueur in enumerate(joueurs_restants):
+                bouton = pygame.Rect(
+                    self.surface.get_width() // 2 - 100,
+                    150 + idx * 60,  # Distance entre les boutons
+                    200, 40
                 )
-                titre_rect = titre.get_rect(center=(self.surface.get_width() // 2, 50))
-                self.surface.blit(titre, titre_rect)
+                pygame.draw.rect(self.surface, (0, 128, 255), bouton)  # Fond bleu
+                texte = font.render(joueur.player_name, True, (255, 255, 255))
+                texte_rect = texte.get_rect(center=bouton.center)
+                self.surface.blit(texte, texte_rect)
+                positions.append((bouton, joueur))
 
-                # Affiche tous les prénoms avec des zones cliquables
-                positions = []
-                for idx, joueur in enumerate(joueurs_vivants):
-                    texte = font.render(joueur.player_name, True, (255, 255, 255))
-                    rect = texte.get_rect(center=(self.surface.get_width() // 2, 150 + idx * 50))
-                    self.surface.blit(texte, rect)
-                    positions.append((rect, joueur))
+            pygame.display.flip()  # Met à jour l'écran
 
-                pygame.display.flip()  # Met à jour l'écran
+            # Gestion des événements
+            joueur_actuel = None
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
-                # Gestion des événements
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
 
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        mouse_pos = pygame.mouse.get_pos()
+                    # Vérifie si un bouton est cliqué
+                    for bouton, joueur in positions:
+                        if bouton.collidepoint(mouse_pos):
+                            joueur_actuel = joueur
+                            break
 
-                        # Vérifie si un prénom est cliqué
-                        for rect, joueur in positions:
-                            if rect.collidepoint(mouse_pos) and joueur == joueur_actuel:
-                                # Affiche le statut amoureux
-                                texte_amoureux = (
-                                    f"Tu es amoureux avec {self.amoureux[1].player_name}."
-                                    if joueur_actuel in self.amoureux
-                                    else "Tu n'es pas amoureux."
-                                )
-                                self.afficher_texte(
-                                    texte_amoureux,
-                                    (self.surface.get_width() // 2, self.surface.get_height() // 2)
-                                )
-                                statut_affiche = True
-                                break
+            if joueur_actuel:
+                # Assurer que le joueur actuel ne se voit pas comme amoureux de lui-même
+                if joueur_actuel in self.amoureux:
+                    autre_amoureux = self.amoureux[0] if self.amoureux[1] == joueur_actuel else self.amoureux[1]
+                    texte_amoureux = (
+                        f"Tu es amoureux avec {autre_amoureux.player_name}."
+                    )
+                else:
+                    texte_amoureux = "Tu n'es pas amoureux."
 
-    def afficher_amoureux(self):
-        """
-        Affiche à chaque joueur s'il est amoureux et, si oui, avec qui.
-        """
-        for joueur in self.joueurs:
-            if joueur.isAlive:
-                texte_amoureux = f"Tu es {'amoureux avec ' + self.amoureux[1].player_name if joueur in self.amoureux else 'non amoureux'}."
-                self.afficher_texte(texte_amoureux, (self.surface.get_width() // 2, self.surface.get_height() // 2))
-                input("Appuie sur Entrée pour continuer.")  # Simule le bouton suivant
+                # Afficher le statut
+                self.afficher_texte(
+                    texte_amoureux,
+                    (self.surface.get_width() // 2, self.surface.get_height() // 2)
+                )
+
+                # Retirer le joueur de la liste des joueurs restants
+                joueurs_restants.remove(joueur_actuel)
+            # Transition après la vérification des amoureux
+        if not joueurs_restants:  # Si tous les joueurs ont vu leur statut
+            self.afficher_transition("Passons aux loups-garous...")
+
 
 
 """
