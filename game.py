@@ -135,27 +135,23 @@ class Game:
                 self.surface.fill((0, 0, 0))  # Efface l'écran
 
                 # Affiche un message pour demander de cliquer sur son prénom
-                self.afficher_texte(
-                    "Cliquez sur votre prénom pour découvrir votre statut amoureux.",
-                    (self.surface.get_width() // 2, 50)
-                )
-
-                # Affiche tous les prénoms
-                positions = []
                 font = pygame.font.Font(None, 36)
+                titre = font.render(
+                    "Cliquez sur votre prénom pour découvrir votre statut amoureux.",
+                    True, (255, 255, 255)
+                )
+                titre_rect = titre.get_rect(center=(self.surface.get_width() // 2, 50))
+                self.surface.blit(titre, titre_rect)
+
+                # Affiche tous les prénoms avec des zones cliquables
+                positions = []
                 for idx, joueur in enumerate(joueurs_vivants):
                     texte = font.render(joueur.player_name, True, (255, 255, 255))
                     rect = texte.get_rect(center=(self.surface.get_width() // 2, 150 + idx * 50))
                     self.surface.blit(texte, rect)
                     positions.append((rect, joueur))
 
-                # Affiche un bouton "Suivant" pour confirmer
-                bouton_suivant = font.render("Suivant", True, (0, 255, 0))
-                bouton_rect = bouton_suivant.get_rect(
-                    center=(self.surface.get_width() // 2, self.surface.get_height() - 100))
-                self.surface.blit(bouton_suivant, bouton_rect)
-
-                pygame.display.flip()
+                pygame.display.flip()  # Met à jour l'écran
 
                 # Gestion des événements
                 for event in pygame.event.get():
@@ -169,6 +165,7 @@ class Game:
                         # Vérifie si un prénom est cliqué
                         for rect, joueur in positions:
                             if rect.collidepoint(mouse_pos) and joueur == joueur_actuel:
+                                # Affiche le statut amoureux
                                 texte_amoureux = (
                                     f"Tu es amoureux avec {self.amoureux[1].player_name}."
                                     if joueur_actuel in self.amoureux
@@ -178,15 +175,8 @@ class Game:
                                     texte_amoureux,
                                     (self.surface.get_width() // 2, self.surface.get_height() // 2)
                                 )
+                                statut_affiche = True
                                 break
-
-                        # Vérifie si le bouton "Suivant" est cliqué
-                        if bouton_rect.collidepoint(mouse_pos):
-                            statut_affiche = True  # Passe au joueur suivant
-                            break
-
-            # Transition vers la prochaine phase une fois tous les statuts affichés
-        self.phase = "vote"  # Après avoir affiché tous les statuts amoureux, on passe à la phase de vote
 
     def afficher_amoureux(self):
         """
