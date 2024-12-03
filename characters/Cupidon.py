@@ -1,9 +1,11 @@
 from characters.Villageois import Villageois
 from popups import selectionner_joueur
+import pygame.mixer
 
 class Cupidon(Villageois):
     def __init__(self, player_name):
         super().__init__(player_name)
+        pygame.mixer.init()
         self.player_name = player_name
         self.name = "Cupidon"
         self.alt_name = "Ange de Noel"
@@ -13,6 +15,8 @@ class Cupidon(Villageois):
                           "cupidon durant la saison hivernale !")
 
         self.card = "./assets/images/cards/cupidon_carte.jpeg"
+        self.son = {"cupidon_reveil": pygame.mixer.Sound("./assets/sons/cupidon_reveil.mp3")}
+
 
     def choisir_amoureux(self, surface, joueurs_vivants, callback):
         """

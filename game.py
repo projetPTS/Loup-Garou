@@ -1,17 +1,28 @@
 import pygame
 from collections import Counter
 from popups import selectionner_joueur
+import pygame.mixer
+from characters.LoupGarou import LoupGarou
+from characters.Villageois import Villageois
+from characters.Voyante import Voyante
+from characters.Sorciere import Sorciere
+from characters.Cupidon import Cupidon
+from characters.Voleur import Voleur
+from characters.Chasseur import Chasseur
+from characters.Petite_fille import Petite_fille
 
 class Game:
     def __init__(self, surface, joueurs):
         """
         Initialise le jeu avec la surface d'affichage et la liste des joueurs.
         """
+        pygame.mixer.init()
         self.surface = surface
         self.joueurs = joueurs
         self.phase = "nuit"  # Début du jeu pendant la nuit
         self.jeu_en_cours = True
         self.amoureux = []
+
 
     import pygame
     def afficher_texte(self, texte, position):
@@ -126,6 +137,10 @@ class Game:
 
         cupidon = next((j for j in self.joueurs if j.name == "Cupidon" and j.isAlive), None)
         if cupidon:
+            if "cupidon_reveil" in cupidon.son:
+                cupidon.son["cupidon_reveil"].play()
+
+            pygame.time.wait(int(cupidon.son["cupidon_reveil"].get_length() * 1000))
             def definir_amoureux(joueur1, joueur2):
                 self.amoureux = [joueur1, joueur2]
                 print(f"{joueur1.player_name} et {joueur2.player_name} sont maintenant amoureux.")
