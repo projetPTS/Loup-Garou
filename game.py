@@ -2,14 +2,14 @@ import pygame
 from collections import Counter
 from popups import selectionner_joueur
 import pygame.mixer
-from characters.LoupGarou import LoupGarou
-from characters.Villageois import Villageois
-from characters.Voyante import Voyante
-from characters.Sorciere import Sorciere
-from characters.Cupidon import Cupidon
-from characters.Voleur import Voleur
-from characters.Chasseur import Chasseur
-from characters.Petite_fille import Petite_fille
+import pygame
+pygame.mixer.init()
+def charger_son(path):
+    try:
+        return pygame.mixer.Sound(path)
+    except FileNotFoundError:
+        print(f"Le fichier {path} n'a pas été trouvé.")
+        return None
 
 class Game:
     def __init__(self, surface, joueurs):
@@ -22,6 +22,13 @@ class Game:
         self.phase = "nuit"  # Début du jeu pendant la nuit
         self.jeu_en_cours = True
         self.amoureux = []
+        self.son = {"partie_commence": charger_son("./assets/sounds/partie_commence.mp3"),
+                    "village_dort": charger_son("./assets/sounds/village_dort.mp3"),
+                    "village_rendort": charger_son("./assets/sounds/village_rendort.mp3"),
+                    "partie_finie": charger_son("./assets/sounds/partie_finie.mp3"),
+                    "village_gagne": charger_son("./assets/sounds/village_gagne.mp3"),
+                    "loupgarou_gagne": charger_son("./assets/sounds/loupgarou_gagne.mp3"),
+        }
 
 
     import pygame
@@ -37,6 +44,13 @@ class Game:
             pygame.display.flip()  # Met à jour l'écran
 
             pygame.time.delay(2000)  # Affiche le texte pendant 2 secondes
+
+
+    def jouer_son(self, son_key):
+        if self.son.get(son_key):
+            self.son[son_key].play()
+        else:
+            print(f"Le son {son_key} n'a pas été chargé.")
 
 
     def boucle_principale(self):
@@ -137,18 +151,20 @@ class Game:
 
         cupidon = next((j for j in self.joueurs if j.name == "Cupidon" and j.isAlive), None)
         if cupidon:
-            if "cupidon_reveil" in cupidon.son:
-                cupidon.son["cupidon_reveil"].play()
+            cupidon.jouer_son("cupidon_reveil")
 
-            pygame.time.wait(int(cupidon.son["cupidon_reveil"].get_length() * 1000))
+
+
+            """if "cupidon_reveil" in cupidon.son:
+                cupidon.son["cupidon_reveil"].play()
+            pygame.time.wait(int(cupidon.son["cupidon_reveil"].get_length() * 1000))"""
+
+        if cupidon:
             def definir_amoureux(joueur1, joueur2):
                 self.amoureux = [joueur1, joueur2]
                 print(f"{joueur1.player_name} et {joueur2.player_name} sont maintenant amoureux.")
                 self.afficher_statut_amoureux()
-                """
-                self.afficher_texte(f"{joueur1.player_name} et️ {joueur2.player_name} sont amoureux",
-                                    (self.surface.get_width() // 2, self.surface.get_height() // 2))
-                """
+
             joueurs_vivants = [j for j in self.joueurs if j.isAlive]
             cupidon.choisir_amoureux(self.surface, joueurs_vivants, definir_amoureux)
 

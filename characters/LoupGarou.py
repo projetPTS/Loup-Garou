@@ -1,6 +1,15 @@
 from characters.Villageois import Villageois
 import pygame
 from popups import selectionner_joueur
+import pygame.mixer
+
+
+def charger_son(path):
+    try:
+        return pygame.mixer.Sound(path)
+    except FileNotFoundError:
+        print(f"Le fichier {path} n'a pas été trouvé.")
+        return None
 
 class LoupGarou(Villageois):
     def __init__(self, player_name):
@@ -12,7 +21,17 @@ class LoupGarou(Villageois):
         self.text_info = "Tiré du film Le Grinch sorti dans les années 2000. Il déteste Noël."
 
         self.card = "./assets/images/cards/loupgarou_carte.jpeg"
+        self.son = {"loupgarou_reveil": charger_son("./assets/sons/loupgarou_reveil.mp3"),
+                    "loupgarou_rendort": charger_son("./assets/sons/loupgarou_rendort.mp3")
+                    }
 
+
+
+    def jouer_son(self, son_key):
+        if self.son.get(son_key):
+            self.son[son_key].play()
+        else:
+            print(f"Le son {son_key} n'a pas été chargé.")
     def cibler_victime(self, surface, joueurs_vivants, callback):
         """
         Affiche une interface pour que les Loups-Garous choisissent une victime.

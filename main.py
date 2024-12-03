@@ -162,6 +162,8 @@ def revele_role(joueur, surface):
         surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, surface.get_height() // 2))
 
 
+
+
     texte_role = font.render(f"Ton rôle est : {joueur.alt_name}", True, (255, 0, 0))
     texte_role_y = 10
     surface.blit(texte_role, (surface.get_width() // 2 - texte_role.get_width() // 2, texte_role_y))
