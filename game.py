@@ -3,6 +3,8 @@ from collections import Counter
 from popups import selectionner_joueur
 import pygame.mixer
 import pygame
+
+
 pygame.mixer.init()
 def charger_son(path):
     try:
@@ -152,8 +154,7 @@ class Game:
         cupidon = next((j for j in self.joueurs if j.name == "Cupidon" and j.isAlive), None)
         if cupidon:
             cupidon.jouer_son("cupidon_reveil")
-
-
+            #pygame.time.wait(int(cupidon.son["cupidon_reveil"].get_length() * 1000))
 
             """if "cupidon_reveil" in cupidon.son:
                 cupidon.son["cupidon_reveil"].play()
@@ -241,7 +242,6 @@ class Game:
             # Transition après la vérification des amoureux
         if not joueurs_restants:  # Si tous les joueurs ont vu leur statut
             self.afficher_transition("Passons aux loups-garous...")
-
 
 
 """
