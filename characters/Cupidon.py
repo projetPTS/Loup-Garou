@@ -1,6 +1,10 @@
 from characters.Villageois import Villageois
 from popups import selectionner_joueur
 import pygame.mixer
+import pygame
+from game import Game
+from menu import afficher_menu, afficher_options
+
 
 def charger_son(path):
     try:
@@ -27,17 +31,18 @@ class Cupidon(Villageois):
                     }
 
 
-
     def jouer_son(self, son_key):
         if self.son.get(son_key):
             self.son[son_key].play()
+            """Game.afficher_transition("Cupidon se réveille")"""
+
         else:
             print(f"Le son {son_key} n'a pas été chargé.")
+
     def choisir_amoureux(self, surface, joueurs_vivants, callback):
         """
         Permet à Cupidon de choisir deux amoureux.
         """
-
         def enregistrer_premier(joueur1):
             """
             Après avoir sélectionné le premier amoureux, sélectionne le second.
@@ -54,8 +59,6 @@ class Cupidon(Villageois):
         # Affiche l'interface pour choisir le premier joueur
         print(f"{self.player_name} est en train de choisir le deuxième amoureux.")
         selectionner_joueur(surface, joueurs_vivants, enregistrer_premier, votant_name=self.player_name)
-
-
 
 
 

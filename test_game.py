@@ -1,7 +1,3 @@
-import unittest
-from unittest.mock import patch
-import pygame
-from game import Game
 
 import unittest
 from unittest.mock import patch
