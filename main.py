@@ -16,6 +16,15 @@ from characters.Chasseur import Chasseur
 from characters.Petite_fille import Petite_fille
 
 
+pygame.mixer.init()
+
+# Charger les sons
+"""son_bienvenue = pygame.mixer.Sound("./assets/sons/bienvenue.mp3")
+son_fermez_yeux = pygame.mixer.Sound("./assets/sons/fermeryeux.mp3")
+son_distribution_roles = pygame.mixer.Sound("./assets/sons/distributionrole.mp3")"""
+"""def jouer_son(son):
+    son.play()"""
+
 def menu():
     options = {
         'usealt_name': True
@@ -38,6 +47,9 @@ def menu():
 def demander_nombre_joueurs(surface):
     pygame.font.init()
     font = pygame.font.Font(None, 36)
+
+
+
     nombre_joueurs = ""
     saisie_active = True
 
@@ -111,6 +123,8 @@ def attribuer_roles(joueurs):
     roles_uniques = [Voyante, Sorciere, Cupidon, Voleur, Chasseur, Petite_fille]
     roles_disponibles = []
     roles_disponibles.extend(roles_uniques)
+    """jouer_son(son_distribution_roles)
+    time.sleep(2)"""
 
     #nb Loups-Garous
     nb_loups = max(1, len(joueurs) // 4)
@@ -136,7 +150,7 @@ def afficher_role_joueur(joueur, surface):
     texte_nom = font.render(f"{joueur.player_name}, clique pour découvrir ton rôle :", True, (0, 0, 0))
     texte_nom_y = 10
     surface.blit(texte_nom, (surface.get_width() // 2 - texte_nom.get_width() // 2, texte_nom_y))
-    verso_carte = "./assets/images/cards/verso_carte.jpeg"
+    verso_carte = "./assets/images/cards/verso_carte.jpeg" #pas utilisé du coup
     carte_image = pygame.image.load(verso_carte)
     carte_image = pygame.transform.scale(carte_image, (500, 500))
     carte_x = surface.get_width() // 2 - carte_image.get_width() // 2
@@ -268,6 +282,9 @@ def main():
 
     pygame.quit()
     sys.exit()
+
+
+
 
 
 if __name__ == "__main__":

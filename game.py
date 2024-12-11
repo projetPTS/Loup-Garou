@@ -239,8 +239,8 @@ class Game:
 
                                 clock.tick(30)
 
-                            """def resoudre_sorciere(action, cible):
-                                if action == "sauver":
+                            def resoudre_sorciere(self, action, cible):
+                                if action == "sauver" and cible:
                                     print(f"La sorcière sauve {victime_des_loups.player_name}.")
                                     victime_des_loups.isAlive = True
                                 elif action == "tuer" and cible:
@@ -248,13 +248,13 @@ class Game:
                                     cible.isAlive = False
                                 elif action == "rien":
                                     print("La sorcière ne fait rien cette nuit.")
-                            """
+
                             sorciere.night_action(
                             joueurs=[j for j in joueurs_vivants if j != victime_des_loups],
                             victime_des_loups=victime_des_loups)
 
 
-                joueur.night_action(self.joueurs,victime_des_loups,self.resoudre_action_sorciere)
+                joueur.night_action(self.joueurs,victime_des_loups,self.resoudre_sorciere)
 
 
             # Résultat des actions de la nuit
@@ -286,6 +286,12 @@ class Game:
         :param texte: Le message à afficher pendant la transition.
         """
         self.surface.fill((0, 0, 0))  # noir
+        robot_carte = "./assets/images/cards/robot.jpeg"
+        carte_image = pygame.image.load(robot_carte)
+        carte_image = pygame.transform.scale(carte_image, (200, 200))
+
+        carte_rect = carte_image.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() - 150))
+        self.surface.blit(carte_image, carte_rect)
 
         font = pygame.font.Font(None, 50)
         texte_surface = font.render(texte, True, (255, 255, 255))
