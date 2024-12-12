@@ -23,13 +23,15 @@ class Game:
         self.phase = "nuit"  # Début du jeu pendant la nuit
         self.jeu_en_cours = True
         self.amoureux = []
-        self.son = {"partie_commence": charger_son("./assets/sounds/partie_commence.mp3"),
-                    "village_dort": charger_son("./assets/sounds/village_dort.mp3"),
-                    "village_rendort": charger_son("./assets/sounds/village_rendort.mp3"),
-                    "partie_finie": charger_son("./assets/sounds/partie_finie.mp3"),
-                    "village_gagne": charger_son("./assets/sounds/village_gagne.mp3"),
-                    "loupgarou_gagne": charger_son("./assets/sounds/loupgarou_gagne.mp3"),
-                    "loupgarou_reveil": charger_son("./assets/sons/loupgarou_reveil.mp3")
+        self.son = {"village_dort": charger_son("./assets/sons/village_dort.mp3"),
+                    "village_rendort": charger_son("./assets/sons/village_rendort.mp3"),
+                    "partie_finie": charger_son("./assets/sons/partie_finie.mp3"),
+                    "village_gagne": charger_son("./assets/sons/village_gagne.mp3"),
+                    "loupgarou_gagne": charger_son("./assets/sons/lg_gagne.mp3"),
+                    "loupgarou_reveil": charger_son("./assets/sons/lg_reveil.mp3"),
+                    "lg_rendort": charger_son("./assets/sons/lg_rendort.mp3"),
+                    "son_fermez_yeux" : charger_son("./assets/sons/fermeryeux.mp3"),
+                    "village_reveil": charger_son("./assets/sons/village_reveil.mp3")
         }
 
 
@@ -65,6 +67,10 @@ class Game:
     def phase_nuit(self):
         # Phase de nuit où chaque rôle spécial effectue son action
         print("Phase de nuit commencée.")
+        self.jouer_son("son_fermez_yeux")
+        self.afficher_transition("Fermez les yeux")
+        pygame.time.delay(3000)
+
         victime_des_loups = None
         joueurs_vivants = [joueur for joueur in self.joueurs if joueur.isAlive]
 
@@ -85,6 +91,7 @@ class Game:
                 joueurs_vivants=[j for j in joueurs_vivants if j not in loups_garous],
                 callback=enregistrer_victime
             )
+            self.jouer_son("lg_rendort")
             self.afficher_transition("Les loups-garous se rendorment...")
 
 
@@ -198,6 +205,7 @@ class Game:
                 self.amoureux = [joueur1, joueur2]
                 print(f"{joueur1.player_name} et {joueur2.player_name} sont maintenant amoureux.")
                 self.afficher_transition("Cupidon se rendort")
+                self.jouer_son("village_reveil")
                 self.afficher_transition("Le village se réveille")
                 self.afficher_statut_amoureux()
 
@@ -265,6 +273,7 @@ class Game:
         if not joueurs_restants:  # Si tous les joueurs ont vu leur statut
             self.jouer_son("loupgarou_reveil")
             self.afficher_transition("Passons aux loups-garous...")
+
 
 
     def phase_jour(self):

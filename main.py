@@ -19,13 +19,13 @@ from characters.Petite_fille import Petite_fille
 pygame.mixer.init()
 
 # Charger les sons
-"""son_bienvenue = pygame.mixer.Sound("./assets/sons/bienvenue.mp3")
-son_fermez_yeux = pygame.mixer.Sound("./assets/sons/fermeryeux.mp3")
-son_distribution_roles = pygame.mixer.Sound("./assets/sons/distributionrole.mp3")"""
-"""def jouer_son(son):
-    son.play()"""
+son_bienvenue = pygame.mixer.Sound("./assets/sons/bienvenue.mp3")
+son_distribution_roles = pygame.mixer.Sound("./assets/sons/distributionrole.mp3")
+def jouer_son(son):
+    son.play()
 
 def menu():
+    jouer_son(son_bienvenue)
     options = {
         'usealt_name': True
     }
@@ -47,8 +47,6 @@ def menu():
 def demander_nombre_joueurs(surface):
     pygame.font.init()
     font = pygame.font.Font(None, 36)
-
-
 
     nombre_joueurs = ""
     saisie_active = True
@@ -72,7 +70,7 @@ def demander_nombre_joueurs(surface):
                     if nombre_joueurs.isdigit() and 6 <= int(nombre_joueurs) <= 12:
                         saisie_active = False
                     else:
-                        nombre_joueurs = ""  # Réinitialiser la saisie en cas de valeur invalide
+                        nombre_joueurs = ""  # réinitialiser tout si pas bon
                 elif event.key == pygame.K_BACKSPACE:
                     nombre_joueurs = nombre_joueurs[:-1]
                 else:
@@ -123,8 +121,9 @@ def attribuer_roles(joueurs):
     roles_uniques = [Voyante, Sorciere, Cupidon, Voleur, Chasseur, Petite_fille]
     roles_disponibles = []
     roles_disponibles.extend(roles_uniques)
-    """jouer_son(son_distribution_roles)
-    time.sleep(2)"""
+
+    jouer_son(son_distribution_roles)
+
 
     #nb Loups-Garous
     nb_loups = max(1, len(joueurs) // 4)
@@ -284,7 +283,26 @@ def main():
     sys.exit()
 
 
+def afficher_transition(self, texte):
+        """
+        Affiche une transition avec un message temporaire entre deux phases du jeu.
+        :param texte: Le message à afficher pendant la transition.
+        """
+        self.surface.fill((0, 0, 0))  # noir
+        robot_carte = "./assets/images/cards/robot.jpeg"
+        carte_image = pygame.image.load(robot_carte)
+        carte_image = pygame.transform.scale(carte_image, (200, 200))
 
+        carte_rect = carte_image.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() - 150))
+        self.surface.blit(carte_image, carte_rect)
+
+        font = pygame.font.Font(None, 50)
+        texte_surface = font.render(texte, True, (255, 255, 255))
+        texte_rect = texte_surface.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() // 2))
+        self.surface.blit(texte_surface, texte_rect)
+
+        pygame.display.flip()
+        pygame.time.delay(3000) # pause
 
 
 if __name__ == "__main__":
