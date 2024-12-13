@@ -5,7 +5,7 @@ import pygame
 
 
 pygame.mixer.init()
-def charger_son(path):
+def charger_son(path): #checker si le son est dans le dossier
     try:
         return pygame.mixer.Sound(path)
     except FileNotFoundError:
@@ -39,14 +39,14 @@ class Game:
             """
             Affiche du texte centré à la position spécifiée.
             """
-            font = pygame.font.Font(None, 36)  # Police et taille
-            text_surface = font.render(texte, True, (255, 255, 255))  # Texte en blanc
-            text_rect = text_surface.get_rect(center=position)  # Centrage du texte
+            font = pygame.font.Font(None, 36)  # police / taille
+            text_surface = font.render(texte, True, (255, 255, 255))  # blanc
+            text_rect = text_surface.get_rect(center=position)
             self.surface.fill((0, 0, 0))  # Écran noir
-            self.surface.blit(text_surface, text_rect)  # Ajoute le texte à la surface
-            pygame.display.flip()  # Met à jour l'écran
+            self.surface.blit(text_surface, text_rect)
+            pygame.display.flip()  # met à jour écran
 
-            pygame.time.delay(2000)  # Affiche le texte pendant 2 secondes
+            pygame.time.delay(2000)  # texte pdnt 2 sec
 
 
     def jouer_son(self, son_key):
@@ -65,7 +65,7 @@ class Game:
             elif self.phase == "vote":
                 self.phase_vote()
     def phase_nuit(self):
-        # Phase de nuit où chaque rôle spécial effectue son action
+        # nuit : persos font leur action
         print("Phase de nuit commencée.")
         self.jouer_son("son_fermez_yeux")
         self.afficher_transition("Fermez les yeux")
@@ -74,7 +74,7 @@ class Game:
         victime_des_loups = None
         joueurs_vivants = [joueur for joueur in self.joueurs if joueur.isAlive]
 
-        if not self.amoureux:  # Appelle Cupidon uniquement la première nuit
+        if not self.amoureux:  # appel de Cupidon que 1e nuit
             self.phase_cupidon()
 
         # étape 1 loups-garous
@@ -95,7 +95,7 @@ class Game:
             self.afficher_transition("Les loups-garous se rendorment...")
 
 
-        # Étape 2 : sorcière
+        # étape 2 : sorcière
         sorciere = next((j for j in self.joueurs if j.name == "Sorcière" and j.isAlive), None)
         if sorciere and victime_des_loups:
             def action_sorciere(action, cible):
@@ -114,15 +114,15 @@ class Game:
                 action_callback=action_sorciere
             )
 
-            # Mise à jour de l'état après la phase de la nuit
+            # maj de l'état après nuit
             if victime_des_loups and not victime_des_loups.isAlive:
                 print(f"{victime_des_loups.player_name} a été attaqué par les loups et est mort.")
                 victime_des_loups.isAlive = False
 
-            # Appliquer les règles pour les amoureux
+            #appel de la règle pour les amoureux
             self.appliquer_regle_amoureux()
 
-            # Transition vers la phase de jour
+            # phase jour
             self.phase = "jour"
             self.afficher_transition("Le jour se lève...")
 
@@ -141,12 +141,10 @@ class Game:
                 action_callback=action_sorciere
             )"""
 
-            # Mise à jour de l'état après la phase de la nuit
             if victime_des_loups and not victime_des_loups.isAlive:
                 print(f"{victime_des_loups.player_name} a été attaqué par les loups et est mort.")
                 #victime_des_loups.isAlive = False
 
-            # Appliquer les règles pour les amoureux
             self.appliquer_regle_amoureux()
 
             # Transition vers la phase de jour
@@ -155,7 +153,7 @@ class Game:
 
 
 
-    def appliquer_regle_amoureux(self):
+    def appliquer_regle_amoureux(self): #amoureux meurent à 2
         """
         Vérifie si un amoureux est mort et élimine l'autre automatiquement.
         """
@@ -168,7 +166,7 @@ class Game:
                 print(f"{joueur1.player_name} meurt par amour pour {joueur2.player_name}.")
                 joueur1.isAlive = False
 
-    def afficher_transition(self, texte):
+    def afficher_transition(self, texte): #def pour toutes les transitions entre les persos
         """
         Affiche une transition avec un message temporaire entre deux phases du jeu.
         :param texte: Le message à afficher pendant la transition.
@@ -189,7 +187,7 @@ class Game:
         pygame.display.flip()
         pygame.time.delay(3000) # pause
 
-    def phase_cupidon(self):
+    def phase_cupidon(self): #cupidon action
         """
         Cupidon choisit deux amoureux au début de la nuit.
         """
@@ -213,18 +211,17 @@ class Game:
             cupidon.choisir_amoureux(self.surface, joueurs_vivants, definir_amoureux)
 
 
-    def afficher_statut_amoureux(self):
+    def afficher_statut_amoureux(self): #reveil village pour savoir qui amoureux de qui
         """
         Permet à chaque joueur vivant de découvrir son statut amoureux.
         Les prénoms cliqués sont retirés de la liste pour éviter la confusion.
         """
         joueurs_vivants = [joueur for joueur in self.joueurs if joueur.isAlive]
-        joueurs_restants = joueurs_vivants.copy()  # Copie des joueurs à traiter
+        joueurs_restants = joueurs_vivants.copy()
 
         while joueurs_restants:
-            self.surface.fill((0, 0, 0))  # Efface l'écran
+            self.surface.fill((0, 0, 0))
 
-            # Titre
             font = pygame.font.Font(None, 36)
             titre = font.render(
                 "Cliquez sur votre prénom pour découvrir votre statut amoureux.",
@@ -233,7 +230,7 @@ class Game:
             titre_rect = titre.get_rect(center=(self.surface.get_width() // 2, 50))
             self.surface.blit(titre, titre_rect)
 
-            # Affichage des boutons pour les prénoms restants
+            # boutons pour les perso restants
             positions = []
             for idx, joueur in enumerate(joueurs_restants):
                 bouton = pygame.Rect(
@@ -244,7 +241,7 @@ class Game:
                 self.surface.blit(texte, texte_rect)
                 positions.append((bouton, joueur))
 
-            pygame.display.flip()  # Met à jour l'écran
+            pygame.display.flip()  # maj écran
 
             joueur_actuel = None
             for event in pygame.event.get():
@@ -270,7 +267,7 @@ class Game:
                 # Retirer joueur de la liste
                 joueurs_restants.remove(joueur_actuel)
 
-        if not joueurs_restants:  # Si tous les joueurs ont vu leur statut
+        if not joueurs_restants:  # qd tous les joueurs ont vu leur statut
             self.jouer_son("loupgarou_reveil")
             self.afficher_transition("Passons aux loups-garous...")
 
@@ -281,7 +278,7 @@ class Game:
         Phase de jour où les joueurs peuvent discuter et décider de leur vote.
         """
         print("Phase de jour commencée.")
-    # Transition vers la phase de vote
+    # Transition  phase de vote
         self.phase = "vote"
 
     def phase_vote(self):
@@ -290,50 +287,46 @@ class Game:
         """
         print("Phase de vote commencée.")
 
-        votes = []  # Liste pour stocker le choix de chaque joueur
+        votes = []  # liste pour stocker le choix des joueur
 
-        # Demander à chaque joueur vivant de voter
+        # joueur vivant voter
         for votant in self.joueurs:
             if votant.isAlive:
 
-                # Fonction pour enregistrer le choix de chaque joueur
+                # save choix de chaque joueur
                 def enregistrer_vote(joueur_selectionne):
                     votes.append(joueur_selectionne)
 
-                # Affiche une interface pour sélectionner le joueur à voter
+                # interface pour sélectionner joueur à voter
                 selectionner_joueur(self.surface, [j for j in self.joueurs if j.isAlive and j != votant],
                                     enregistrer_vote, votant.player_name)
 
-        # Compter les votes
+        # Compter votes
         comptage_votes = Counter(votes)
         joueur_elu = max(comptage_votes, key=comptage_votes.get)  # Joueur avec le plus de votes
 
-        # Affichage des résultats
+        # résultats
         self.afficher_resultats_vote(joueur_elu)
-
-        # Marquer le joueur élu comme éliminé
         self.eliminer_joueur(joueur_elu)
 
-        # Retour à la phase de nuit
+        #  phase de nuit
         self.phase = "nuit"
 
- # Affiche le texte pendant 2 secondes
 
     def afficher_resultats_vote(self, joueur_elu):
         """
         Affiche le récapitulatif des votes et annonce le joueur éliminé.
         """
         font = pygame.font.Font(None, 36)
-        self.surface.fill((0, 0, 0))  # Efface l'écran
+        self.surface.fill((0, 0, 0))
 
-        # Afficher le joueur qui est éliminé
         texte_resultat = f"{joueur_elu.player_name} a été éliminé avec le plus de votes."
         texte_surface = font.render(texte_resultat, True, (255, 0, 0))
         texte_rect = texte_surface.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() // 2))
         self.surface.blit(texte_surface, texte_rect)
 
         pygame.display.flip()
-        pygame.time.delay(3000)  # Affiche le texte pendant 3 secondes
+        pygame.time.delay(3000)  # txt 3 sec
 
     def eliminer_joueur(self, joueur):
         """
@@ -354,7 +347,6 @@ class Game:
             elif self.phase == "vote":
                 self.phase_vote()
 
-            # Vérification des conditions de fin de jeu
             if self.fin_du_jeu():
                 self.jeu_en_cours = False
                 print("Le jeu est terminé.")

@@ -1,8 +1,6 @@
 import pygame
 import random
-import time
 import sys
-from pygame import *
 
 from game import Game
 from menu import afficher_menu, afficher_options
@@ -18,7 +16,7 @@ from characters.Petite_fille import Petite_fille
 
 pygame.mixer.init()
 
-# Charger les sons
+# sons
 son_bienvenue = pygame.mixer.Sound("./assets/sons/bienvenue.mp3")
 son_distribution_roles = pygame.mixer.Sound("./assets/sons/distributionrole.mp3")
 def jouer_son(son):

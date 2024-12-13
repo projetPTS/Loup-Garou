@@ -44,51 +44,12 @@ class LoupGarou(Villageois):
 
         def selectionner(joueur_selectionne):
             print(f"Le ou les Loups-Garous ont choisi {joueur_selectionne.player_name}.")
-            callback(joueur_selectionne)  # Appelle le callback avec le joueur sélectionné.
+            callback(joueur_selectionne)  # appel de callback joueur sélectionné.
 
         selectionner_joueur(surface, joueurs_vivants, selectionner, votant_name=self.player_name)
 
 
     def night_action(self):
         return
-"""
-def phase_nuit(self):
-    
-#Phase de nuit où chaque rôle spécial effectue son action.
-    
-    print("Phase de nuit commencée.")
-
-    victime_des_loups = None
-    joueurs_vivants = [joueur for joueur in self.joueurs if joueur.isAlive]
-
-    # Étape 1 : Les loups-garous choisissent une victime
-    loups_garous = [joueur for joueur in self.joueurs if joueur.name == "Loup-Garou" and joueur.isAlive]
-
-    if loups_garous:
-        def enregistrer_victime(joueur_selectionne):
-            nonlocal victime_des_loups
-            victime_des_loups = joueur_selectionne
-            print(f"Victime des loups : {victime_des_loups.player_name}")
-
-        # Les loups-garous votent ensemble pour choisir une victime
-        loups_garous[0].cibler_victime(
-            surface=self.surface,
-            joueurs_vivants=[j for j in joueurs_vivants if j not in loups_garous],
-            callback=enregistrer_victime
-        )
-
-    # Étape 2 : Les autres rôles spéciaux agissent
-    for joueur in joueurs_vivants:
-        if joueur.name != "Loup-Garou":
-            joueur.night_action()
-
-    # Résultat des actions de la nuit
-    if victime_des_loups:
-        print(f"{victime_des_loups.player_name} a été attaqué par les loups.")
-        victime_des_loups.isAlive = False
-
-    # Transition vers la phase de jour
-    self.phase = "jour"
-"""
 def day_action(self):
     return

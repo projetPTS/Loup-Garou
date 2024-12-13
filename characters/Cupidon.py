@@ -2,16 +2,15 @@ from characters.Villageois import Villageois
 from popups import selectionner_joueur
 import pygame.mixer
 import pygame
-from game import Game
-from menu import afficher_menu, afficher_options
 
-
+#checker si le son est dans le dossier
 def charger_son(path):
     try:
         return pygame.mixer.Sound(path)
     except FileNotFoundError:
         print(f"Le fichier {path} n'a pas été trouvé.")
         return None
+
 class Cupidon(Villageois):
 
     def __init__(self, player_name):
@@ -31,7 +30,7 @@ class Cupidon(Villageois):
                     }
 
 
-    def jouer_son(self, son_key):
+    def jouer_son(self, son_key): #def pour jouer le son
         if self.son.get(son_key):
             self.son[son_key].play()
             """Game.afficher_transition("Cupidon se réveille")"""
@@ -52,11 +51,11 @@ class Cupidon(Villageois):
             def enregistrer_deuxieme(joueur2):
                 callback(joueur1, joueur2)
 
-            # Affiche l'interface pour choisir le second joueur
+            # interface pour choisir le 2e joueur
             print(f"{self.player_name} est en train de choisir le premier amoureux.")
             selectionner_joueur(surface, joueurs_restants, enregistrer_deuxieme, votant_name=self.player_name)
 
-        # Affiche l'interface pour choisir le premier joueur
+        # interface pour choisir le 1er joueur
         print(f"{self.player_name} est en train de choisir le deuxième amoureux.")
         selectionner_joueur(surface, joueurs_vivants, enregistrer_premier, votant_name=self.player_name)
 

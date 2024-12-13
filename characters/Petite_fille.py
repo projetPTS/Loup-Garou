@@ -17,7 +17,7 @@ class Petite_fille(Villageois):
                           "espionnant les Grinch-Garous du coin de son œil ? Personne ! Ce rôle lui ira comme un gant."
                           "Tiré du film La Reine des Neiges")
 
-        self.card = "./assets/images/cards/petite_fille_carte.jpeg"
+        self.card = "./assets/images/cards/petitefille_carte.jpeg"
         self.son = {"petitefille_reveil": charger_son("./assets/sons/petitefille_reveil.mp3"),
                     "petitefille_rendort": charger_son("./assets/sons/petitefille_rendort.mp3")
                     }

@@ -51,13 +51,10 @@ class Sorciere(Villageois):
         print(f"\n[Phase de la sorcière : {self.player_name}]")
         actions = []
 
-        # Si une potion de sauvetage est disponible et qu'il y a une victime
         if self.potions_sauver > 0 and victime_des_loups:
             actions.append("sauver")
-        # Si une potion de meurtre est disponible
         if self.potions_tuer > 0:
             actions.append("tuer")
-        # Ajout de l'option "ne rien faire"
         actions.append("rien")
 
         print("Que voulez-vous faire ?")
