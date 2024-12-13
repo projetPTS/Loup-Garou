@@ -91,7 +91,7 @@ def demander_noms_joueurs(surface, nombre_joueurs):
             texte = font.render(f"Joueur {i + 1}, entrez votre nom :", True, (255, 255, 255))
             surface.blit(texte, (surface.get_width() // 2 - texte.get_width() // 2, 200))
 
-            # Affiche le nom en cours de saisie
+            # nom en cours de saisie
             texte_name = font.render(name, True, (255, 255, 255))
             surface.blit(texte_name, (surface.get_width() // 2 - texte_name.get_width() // 2, 300))
 

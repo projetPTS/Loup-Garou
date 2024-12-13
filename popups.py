@@ -15,18 +15,15 @@ def selectionner_joueur(surface, joueurs, action_callback, votant_name=None):
     pygame.font.init()
     font = pygame.font.Font(None, 36)
 
-    joueur_selectionne = None  # Variable pour stocker le joueur sélectionné
+    joueur_selectionne = None  # variable qui stocke  joueur sélectionné
 
     while joueur_selectionne is None:
-        # Efface l'écran et redessine tous les éléments pour chaque rafraîchissement
-        surface.fill((30, 30, 30))  # Fond d'écran sombre pour contraste
+        surface.fill((30, 30, 30))
 
-        # Afficher le nom du joueur votant en haut de l'écran, si fourni
         if votant_name:
             texte_votant = font.render(f"{votant_name} est en train de voter...", True, (255, 255, 255))
             surface.blit(texte_votant, (surface.get_width() // 2 - texte_votant.get_width() // 2, 20))
 
-        # Affichage des boutons pour chaque joueur
         y_position = 150
         boutons = []
         for joueur in joueurs:
@@ -34,7 +31,6 @@ def selectionner_joueur(surface, joueurs, action_callback, votant_name=None):
             texte_surface = font.render(texte, True, (255, 255, 255))
             rect = pygame.Rect(surface.get_width() // 2 - 100, y_position, 200, 50)
 
-            # Détecter si la souris est au-dessus d'un bouton pour changer de couleur
             couleur = (70, 130, 180) if rect.collidepoint(pygame.mouse.get_pos()) else (100, 100, 100)
             pygame.draw.rect(surface, couleur, rect)
             surface.blit(texte_surface, (rect.x + (rect.width - texte_surface.get_width()) // 2,
@@ -42,7 +38,7 @@ def selectionner_joueur(surface, joueurs, action_callback, votant_name=None):
             boutons.append((rect, joueur))
             y_position += 80
 
-        # Gestion des événements
+        # gestion events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -50,7 +46,7 @@ def selectionner_joueur(surface, joueurs, action_callback, votant_name=None):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for rect, joueur in boutons:
                     if rect.collidepoint(event.pos):
-                        joueur_selectionne = joueur  # Enregistre le joueur sélectionné
+                        joueur_selectionne = joueur  # save le joueur sélectionné
 
         pygame.display.flip()
 
